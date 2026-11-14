@@ -33,7 +33,7 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$PASS" | docker login -u "$USER" --password-stdin
-                        docker push $IMAGE
+                        docker push "$IMAGE"
                         docker logout
                     '''
                 }
@@ -45,7 +45,15 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh './deploy.sh "$EC2_HOST" "$SSH_KEY" "$IMAGE"'
+                sh '''
+                    docker rm -f devops-app || true
+
+                    docker run -d \
+                        --name devops-app \
+                        --restart unless-stopped \
+                        -p 80:80 \
+                        "$IMAGE"
+                '''
             }
         }
     }
