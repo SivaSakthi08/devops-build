@@ -1,0 +1,137 @@
+Branch indexing
+Connecting to https://api.github.com using SivaSakthi08/****** (github-creds)
+Obtained Jenkinsfile from cc45725c15ffd66b58a3c806aafcc6d90512f3c7
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-build-pipeline_master
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+using credential github-creds
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-build-pipeline_master/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/SivaSakthi08/devops-build.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/SivaSakthi08/devops-build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.50.1'
+using GIT_ASKPASS to set credentials github-creds
+ > git fetch --no-tags --force --progress -- https://github.com/SivaSakthi08/devops-build.git +refs/heads/master:refs/remotes/origin/master # timeout=10
+Checking out Revision cc45725c15ffd66b58a3c806aafcc6d90512f3c7 (master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f cc45725c15ffd66b58a3c806aafcc6d90512f3c7 # timeout=10
+Commit message: "Fix production deployment stage"
+ > git rev-list --no-walk 9533f976a0f59b6d805f8460415e5224aefec381 # timeout=10
+
+Could not update commit status. Message: {"message":"Resource not accessible by personal access token","documentation_url":"https://docs.github.com/rest/commits/statuses#create-a-commit-status","status":"403"}
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
++ docker build -t sivasakthi08/prod:latest .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 191B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/nginx:alpine
+#2 DONE 1.2s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 166B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/nginx:alpine@sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 1.84kB done
+#5 DONE 0.0s
+
+#6 [2/2] COPY build/ /usr/share/nginx/html/
+#6 CACHED
+
+#7 exporting to image
+#7 exporting layers done
+#7 writing image sha256:1adf70ab4fb9d5f5f0d5bf2c8819059b43bacd63efc08bec3aa766a37c6bec32 done
+#7 naming to docker.io/sivasakthi08/prod:latest done
+#7 DONE 0.0s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push)
+[Pipeline] withCredentials
+Masking supported pattern matches of $PASS
+[Pipeline] {
+[Pipeline] sh
++ echo ****
++ docker login -u sivasakthi08 --password-stdin
+WARNING! Your password will be stored unencrypted in /var/lib/jenkins/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
++ docker push sivasakthi08/prod:latest
+The push refers to repository [docker.io/sivasakthi08/prod]
+64a80f25759d: Preparing
+a0d10c4778f6: Preparing
+7c65737affdd: Preparing
+1e22368e5460: Preparing
+5c33c830b8f7: Preparing
+d27d57ca11fa: Preparing
+0a2bd7f1862d: Preparing
+4317ab56fea8: Preparing
+75f1d9657d88: Preparing
+d27d57ca11fa: Waiting
+0a2bd7f1862d: Waiting
+4317ab56fea8: Waiting
+75f1d9657d88: Waiting
+5c33c830b8f7: Layer already exists
+7c65737affdd: Layer already exists
+a0d10c4778f6: Layer already exists
+1e22368e5460: Layer already exists
+64a80f25759d: Layer already exists
+75f1d9657d88: Layer already exists
+d27d57ca11fa: Layer already exists
+4317ab56fea8: Layer already exists
+0a2bd7f1862d: Layer already exists
+latest: digest: sha256:2d661787069c7b42c7297a3c0fcb268229993e24dd0bd0ce4dfba09f59ac0254 size: 2199
++ docker logout
+Removing login credentials for https://index.docker.io/v1/
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] sh
++ docker rm -f devops-app
+devops-app
++ docker run -d --name devops-app --restart unless-stopped -p 80:80 sivasakthi08/prod:latest
+c8c264fbcb4c176012acb0bbde55130e96efb762513e68c98ee8ee993847d515
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+
+Could not update commit status. Message: {"message":"Resource not accessible by personal access token","documentation_url":"https://docs.github.com/rest/commits/statuses#create-a-commit-status","status":"403"}
+
+Finished: SUCCESS
