@@ -1,0 +1,141 @@
+Started by user Sivasakthi
+Connecting to https://api.github.com using SivaSakthi08/****** (github-creds)
+Obtained Jenkinsfile from 9533f976a0f59b6d805f8460415e5224aefec381
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-build-pipeline_dev
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+using credential github-creds
+Cloning the remote Git repository
+Cloning with configured refspecs honoured and without tags
+Cloning repository https://github.com/SivaSakthi08/devops-build.git
+ > git init /var/lib/jenkins/workspace/devops-build-pipeline_dev # timeout=10
+Fetching upstream changes from https://github.com/SivaSakthi08/devops-build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.50.1'
+using GIT_ASKPASS to set credentials github-creds
+ > git fetch --no-tags --force --progress -- https://github.com/SivaSakthi08/devops-build.git +refs/heads/dev:refs/remotes/origin/dev # timeout=10
+ > git config remote.origin.url https://github.com/SivaSakthi08/devops-build.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/dev:refs/remotes/origin/dev # timeout=10
+Avoid second fetch
+Checking out Revision 9533f976a0f59b6d805f8460415e5224aefec381 (dev)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 9533f976a0f59b6d805f8460415e5224aefec381 # timeout=10
+Commit message: "Add Jenkins CI/CD pipeline"
+First time build. Skipping changelog.
+
+Could not update commit status. Message: {"message":"Resource not accessible by personal access token","documentation_url":"https://docs.github.com/rest/commits/statuses#create-a-commit-status","status":"403"}
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
++ docker build -t sivasakthi08/dev:latest .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 191B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/nginx:alpine
+#2 DONE 2.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 166B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/nginx:alpine@sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72
+#4 resolve docker.io/library/nginx:alpine@sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72 0.0s done
+#4 sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72 10.33kB / 10.33kB done
+#4 sha256:697b0b156c70b91130853fd0675c6be36665939d5f93dce2686be04b4c3f98a8 2.50kB / 2.50kB done
+#4 sha256:7cac34a4d72be2539edd7d8732207e8ffc8268a0b6458e6491f9b7c3dc95a70d 12.32kB / 12.32kB done
+#4 DONE 0.3s
+
+#5 [internal] load build context
+#5 transferring context: 2.61MB 0.1s done
+#5 DONE 0.1s
+
+#6 [2/2] COPY build/ /usr/share/nginx/html/
+#6 DONE 0.1s
+
+#7 exporting to image
+#7 exporting layers 0.1s done
+#7 writing image sha256:1adf70ab4fb9d5f5f0d5bf2c8819059b43bacd63efc08bec3aa766a37c6bec32 done
+#7 naming to docker.io/sivasakthi08/dev:latest 0.0s done
+#7 DONE 0.1s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push)
+[Pipeline] withCredentials
+Masking supported pattern matches of $PASS
+[Pipeline] {
+[Pipeline] sh
++ echo ****
++ docker login -u sivasakthi08 --password-stdin
+WARNING! Your password will be stored unencrypted in /var/lib/jenkins/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
++ docker push sivasakthi08/dev:latest
+The push refers to repository [docker.io/sivasakthi08/dev]
+64a80f25759d: Preparing
+a0d10c4778f6: Preparing
+7c65737affdd: Preparing
+1e22368e5460: Preparing
+5c33c830b8f7: Preparing
+d27d57ca11fa: Preparing
+0a2bd7f1862d: Preparing
+4317ab56fea8: Preparing
+75f1d9657d88: Preparing
+d27d57ca11fa: Waiting
+0a2bd7f1862d: Waiting
+4317ab56fea8: Waiting
+75f1d9657d88: Waiting
+a0d10c4778f6: Mounted from sivasakthi08/prod
+5c33c830b8f7: Mounted from sivasakthi08/prod
+1e22368e5460: Mounted from sivasakthi08/prod
+7c65737affdd: Mounted from sivasakthi08/prod
+d27d57ca11fa: Mounted from sivasakthi08/prod
+0a2bd7f1862d: Mounted from sivasakthi08/prod
+4317ab56fea8: Mounted from sivasakthi08/prod
+64a80f25759d: Pushed
+75f1d9657d88: Mounted from sivasakthi08/prod
+latest: digest: sha256:2d661787069c7b42c7297a3c0fcb268229993e24dd0bd0ce4dfba09f59ac0254 size: 2199
++ docker logout
+Removing login credentials for https://index.docker.io/v1/
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+Stage "Deploy" skipped due to when conditional
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+
+Could not update commit status. Message: {"message":"Resource not accessible by personal access token","documentation_url":"https://docs.github.com/rest/commits/statuses#create-a-commit-status","status":"403"}
+
+Finished: SUCCESS
